@@ -168,7 +168,7 @@ class secret
         if (empty($key))
             $key = $this->key;
 
-        return openssl_encrypt($data, $this->method, $key);
+        return openssl_encrypt($data, $this->method, $key, OPENSSL_RAW_DATA, substr(md5($data), 0, 16));
     }
 
     /**
@@ -181,7 +181,7 @@ class secret
         if (empty($key))
             $key = $this->key;
 
-        return openssl_decrypt($data, $this->method, $key);
+        return openssl_decrypt($data, $this->method, $key, OPENSSL_RAW_DATA, substr(md5($data), 0, 16));
     }
 
     public function setKey($key)

@@ -7,14 +7,19 @@
 <script>
     function login()
     {
-        let name = document.getElementById('text').text();
-        let password = document.getElementById('password').text();
+        let name = document.getElementById('name').value;
+        let password = document.getElementById('password').value;
 
         let ajax = new XMLHttpRequest();
 
-        ajax.open('post', 'index.php/user/login', true);
+        ajax.open('post', '/index.php/user/login', true);
         ajax.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-        ajax.send()
+        ajax.onreadystatechange = function() {
+            if (ajax.readyState == 4 && ajax.status == 200) {
+                console.log(ajax.responseText);
+            }
+        }
+        ajax.send('name='+ name +'&password='+ password);
     }
 </script>
 

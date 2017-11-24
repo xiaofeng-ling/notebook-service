@@ -46,8 +46,8 @@ Router()->addRoles('/user', function() {
 
 Router()->addRoles('/user/login', function() {
     $user = new \user\user();
-    $user->login();
-});
+    return $user->login();
+}, 'post');
 
 Router()->start();
 

@@ -65,7 +65,7 @@ class router
                 ;
 
             $userId = secret()->decrypt($userSess);
-            var_dump($userId);
+//            var_dump($userId);
         });
     }
 
@@ -94,7 +94,7 @@ class router
     {
         $method = strtoupper($method);
 
-        $url = '/' . preg_replace('/\{var\}/', '(\\S+)', preg_replace('/\//', '\\/', $url)) . '/';
+        $url = '/' . preg_replace('/\{var\}/', '(\\S+)', preg_replace('/\//', '\\/', $url)) . '$/';
 
         if ($method == 'GET')
             $this->getRoutes[$url] = $func;
