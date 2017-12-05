@@ -24,7 +24,7 @@ class user
         // 有的话进行密码比对
 
         // 假设验证通过
-        io()->setCookie('sess99', secret()->encrypt(234), time()+3600);
+        io()->setCookie('sess', secret()->encrypt($name), time()+3600, '/');
         return ['cn' => 0, 'msg' => '验证通过'];
     }
 }

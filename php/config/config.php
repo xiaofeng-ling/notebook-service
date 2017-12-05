@@ -12,3 +12,7 @@ $config['db'] = [
     'type' => 'sqlite',
     'filename' => 'test.db',
 ];
+
+$config['system'] = [
+    'domain' => '',
+];

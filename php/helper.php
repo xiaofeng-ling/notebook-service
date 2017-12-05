@@ -45,11 +45,27 @@ if (!function_exists('db'))
 
 if (!function_exists('config'))
 {
-    function config()
+    // key is 'system.domain.test'
+    function config($key = '')
     {
         global $config;
 
-        return $config;
+        if (empty($key))
+            return $config;
+
+        $key = explode('.', $key);
+
+        $result = $config;
+
+        foreach ($key as $v)
+        {
+            if (isset($result[$v]))
+                $result = $result[$v];
+            else
+                throw new \Exception("error config!");
+        }
+
+        return $result;
     }
 }
 
@@ -168,7 +184,7 @@ class secret
         if (empty($key))
             $key = $this->key;
 
-        return openssl_encrypt($data, $this->method, $key, OPENSSL_RAW_DATA, substr(md5($data), 0, 16));
+        return openssl_encrypt($data, $this->method, $key, OPENSSL_RAW_DATA, substr(md5($key), 0, 16));
     }
 
     /**
@@ -181,7 +197,7 @@ class secret
         if (empty($key))
             $key = $this->key;
 
-        return openssl_decrypt($data, $this->method, $key, OPENSSL_RAW_DATA, substr(md5($data), 0, 16));
+        return openssl_decrypt($data, $this->method, $key, OPENSSL_RAW_DATA, substr(md5($key), 0, 16));
     }
 
     public function setKey($key)

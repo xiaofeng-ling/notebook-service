@@ -42,7 +42,7 @@ class router
 
         if (is_array($result))
         {
-            // 格式统一
+            // 确保返回的格式统一
             $result = array_replace(['cn' => 0, 'msg' => '', 'data' => []], $result);
             echo json_encode($result);
         }
@@ -65,7 +65,7 @@ class router
                 ;
 
             $userId = secret()->decrypt($userSess);
-//            var_dump($userId);
+            var_dump($userId);
         });
     }
 
