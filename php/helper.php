@@ -5,9 +5,53 @@
  * Date: 2017/11/22 0022
  * Time: 15:36
  */
+if (!function_exists('init'))
+{
+    function init()
+    {
+        // 切换工作目录
+        if (getcwd() !== __DIR__)
+            chdir(__DIR__);
+
+        // 自动加载
+        spl_autoload_register(function($classname) {
+            if ($classname)
+            {
+                // 优先加载文件夹中的类
+                // new \test\test()  => test(dir)\test.php@test(class)
+                $path = __DIR__ . '\\controller\\' . $classname . '.php';
+
+                if (file_exists($path))
+                    require_once $path;
+                else
+                {
+                    // 尝试加载文件
+                    // new \test\test() => test.php@test(class)
+                    $classnameArr = explode('\\', $classname);
+                    array_pop($classnameArr);
+                    $path = __DIR__ . '\\controller\\' . implode('\\', $classnameArr) . '.php';
+
+                    if (file_exists($path))
+                        require_once $path;
+                }
+            }
+        });
+
+        set_error_handler(function() {
+
+        });
+
+        set_exception_handler(function() {
+
+        });
+    }
+}
 
 if (!function_exists('router'))
 {
+    /**
+     * @return Router()
+     */
     function router()
     {
         if (!Router::$i)
@@ -19,6 +63,11 @@ if (!function_exists('router'))
 
 if (!function_exists('view'))
 {
+    /**
+     * @param $path
+     * @param array $args
+     * @throws Exception
+     */
     function view($path, Array $args = [])
     {
         $path = __DIR__ . '\\view\\' . $path;
@@ -34,8 +83,12 @@ if (!function_exists('view'))
 
 if (!function_exists('db'))
 {
+    /**
+     * @return db()
+     */
     function db()
     {
+        require_once "model/model.php";
         if (!db::$i)
             db::$i = new db();
 
@@ -71,6 +124,9 @@ if (!function_exists('config'))
 
 if (!function_exists('io'))
 {
+    /**
+     * @return io()
+     */
     function io()
     {
         if (!io::$i)
@@ -82,6 +138,10 @@ if (!function_exists('io'))
 
 if (!function_exists('secret'))
 {
+    /**
+     * @param string $key
+     * @return secret()
+     */
     function secret($key = '')
     {
         if (!secret::$i)

@@ -16,28 +16,7 @@ require_once 'config/config.php';
 require_once 'router.php';
 require_once 'helper.php';
 
-spl_autoload_register(function($classname) {
-    if ($classname)
-    {
-        // 优先加载文件夹中的类
-        // new \test\test()  => test(dir)\test.php@test(class)
-        $path = __DIR__ . '\\controller\\' . $classname . '.php';
-
-        if (file_exists($path))
-            require_once $path;
-        else
-        {
-            // 尝试加载文件
-            // new \test\test() => test.php@test(class)
-            $classnameArr = explode('\\', $classname);
-            array_pop($classnameArr);
-            $path = __DIR__ . '\\controller\\' . implode('\\', $classnameArr) . '.php';
-
-            if (file_exists($path))
-                require_once $path;
-        }
-    }
-});
+init();
 
 Router()->addRoles('/user', function() {
     $user = new \user\user();
@@ -48,6 +27,12 @@ Router()->addRoles('/user/login', function() {
     $user = new \user\user();
     return $user->login();
 }, 'post');
+
+Router()->addRoles('/test', function() {
+   $user = new \user\user();
+
+   var_dump($user->getLoginUser());
+});
 
 Router()->start();
 

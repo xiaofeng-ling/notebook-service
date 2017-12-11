@@ -65,7 +65,6 @@ class router
                 ;
 
             $userId = secret()->decrypt($userSess);
-            var_dump($userId);
         });
     }
 
