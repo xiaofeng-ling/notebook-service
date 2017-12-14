@@ -34,5 +34,9 @@ Router()->addRoles('/test', function() {
    var_dump($user->getLoginUser());
 });
 
+// 用作路由时
+if (preg_match('/\.js|\.css|\.png|\.jpg/', $_SERVER['REQUEST_URI']))
+    return false;
+
 Router()->start();
 

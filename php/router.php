@@ -13,10 +13,13 @@ class router
 
     private $globalRoutes;
 
+    private $url;
+
     public static $i;
 
     public function __construct()
     {
+        $this->url = $_SERVER['REQUEST_URI'];
         $this->initRoutes();
     }
 
@@ -25,10 +28,6 @@ class router
      */
     public function start()
     {
-        $url = $_SERVER['REQUEST_URI'];
-
-        $parseUrl = $this->parseUrl($url);
-
         $result = '';
 
         // 先执行全局路由，可以做些是否登录的验证
@@ -36,13 +35,14 @@ class router
             call_user_func($func);
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST')
-            $result = $this->dispatch($this->postRoutes, $url);
+            $result = $this->dispatch($this->postRoutes, $this->url);
         else if ($_SERVER['REQUEST_METHOD'] == 'GET')
-            $result = $this->dispatch($this->getRoutes, $url);
+            $result = $this->dispatch($this->getRoutes, $this->url);
 
         if (is_array($result))
         {
             // 确保返回的格式统一
+            header('Content-type: application/json;charset=utf-8');
             $result = array_replace(['cn' => 0, 'msg' => '', 'data' => []], $result);
             echo json_encode($result);
         }
@@ -58,13 +58,18 @@ class router
         $this->postRoutes = [];
         $this->getRoutes = [];
 
+        // 用户验证
         $this->addGlobalRoles('user_check', function() {
-            $userSess = io()->cookie('sess');
+            if (preg_match('/\/user\/login/', $this->url))
+                return;
 
-            if (!$userSess)
-                ;
+            if (preg_match('/\/user$/', $this->url))
+                return;
 
-            $userId = secret()->decrypt($userSess);
+            $user = (new \user\user())->getLoginUser();
+
+            if (isset($user['cn']) && $user['cn'] != 0)
+                $this->on403($user['msg']);
         });
     }
 
@@ -111,8 +116,6 @@ class router
      */
     private function dispatch(Array $routes, $url)
     {
-        $result = '';
-
         foreach ($routes as $k => $v)
         {
             if (preg_match($k, $url, $match))
@@ -126,7 +129,7 @@ class router
             }
         }
 
-        die('404 Not Found!');
+        $this->on404();
     }
 
     /**
@@ -158,5 +161,23 @@ class router
     public function redirect($url)
     {
         header("Location: $url");
+    }
+
+    /**
+     * 404 error
+     */
+    private function on404()
+    {
+        die('404 Not Found!');
+    }
+
+    /**
+     * 403 error
+     * @param string $msg
+     */
+    private function on403($msg = '')
+    {
+        header('Content-type: text/html;charset=utf-8');
+        die('<h1>403</h1>'.$msg);
     }
 }

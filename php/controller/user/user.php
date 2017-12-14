@@ -10,6 +10,11 @@ namespace user;
 
 class user
 {
+    /**
+     * @var null
+     */
+    private $loggedUser = null;
+
     public function loginView()
     {
         return view('user\login.php');
@@ -30,22 +35,29 @@ class user
         if ($password != $result[0]['password'])
             return ['cn' => 1, 'msg' => '验证失败！'];
 
+        $sess = base64_encode(secret()->encrypt($name));
         // 假设验证通过
-        io()->setCookie('sess', secret()->encrypt($name), time()+3600, '/');
-        return ['cn' => 0, 'msg' => '验证通过'];
+        io()->setCookie('sess', $sess, time()+3600, '/');
+        return ['cn' => 0, 'msg' => '验证通过', 'data' => $sess];
     }
 
     public function getLoginUser()
     {
+        if ($this->loggedUser)
+            return $this->loggedUser;
+
         $sess = io()->cookie('sess');
 
-        $name = secret()->decrypt($sess);
+        if (empty($sess))
+            $sess = io()->post('sess');
+
+        $name = secret()->decrypt(base64_decode($sess));
 
         $user = db()->query('SELECT * FROM user WHERE name="'.$name.'"');
 
         if (!$user)
             return ['cn' => 4, 'msg' => '没有这个用户'];
 
-        return $user;
+        return $this->loggedUser = $user;
     }
 }
