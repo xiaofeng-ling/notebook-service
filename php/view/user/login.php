@@ -18,11 +18,11 @@
                 name: name,
                 password: password
             },
-            success: function(response) {
-                console.log(response)
+            success: (response) => {
                 if (response.cn === 0) {
-                    document.cookie = 'sess='+decodeURI(response.data);
+                    document.cookie = `sess=${decodeURI(response.data)}`;
                 }
+                $("#info").innerHTML = response.msg;
             }
         });
     }

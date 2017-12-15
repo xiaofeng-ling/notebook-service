@@ -1,11 +1,11 @@
-$ = function(select) {
+$ = function(select = null) {
     return new $.prototype.init(select)
 };
 
 $.prototype = {
     constructor: $,
-    init: function(select) {
-        if (select === undefined)
+    init: function(select = null) {
+        if (select === null)
             return this;
 
         if (select.indexOf('.') !== -1)
@@ -24,7 +24,7 @@ $.ajax = function(params) {
 
     ajax.open(params['method'], params['url'], true);
     ajax.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-    ajax.onreadystatechange = function() {
+    ajax.onreadystatechange = () => {
         if (ajax.readyState === 4 && ajax.status === 200) {
             let response = JSON.parse(ajax.responseText);
             params['success'](response);
@@ -36,7 +36,10 @@ $.ajax = function(params) {
     }
 
     for (let k in params['data'])
-        data += k + '=' + params['data'][k]
+        data += `${k}=${params['data'][k]}&`;
+
+    // 去掉最后一个多余的&符号
+    data = data.slice(0, -1);
 
     ajax.send(data);
 }
