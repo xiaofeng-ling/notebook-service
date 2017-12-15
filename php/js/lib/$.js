@@ -1,10 +1,5 @@
-$ = function(select = null) {
-    return new $.prototype.init(select)
-};
-
-$.prototype = {
-    constructor: $,
-    init: function(select = null) {
+class _$ {
+    constructor(select = null) {
         if (select === null)
             return this;
 
@@ -15,31 +10,39 @@ $.prototype = {
         else
             return document.getElementsByTagName(select);
     }
+
+    ajax (params) {
+        let ajax = new XMLHttpRequest(), data = '';
+
+        ajax.open(params['method'], params['url'], true);
+        ajax.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        ajax.onreadystatechange = () => {
+            if (ajax.readyState === 4 && ajax.status === 200) {
+                let response = JSON.parse(ajax.responseText);
+                params['success'](response);
+            }
+            else {
+                if ('error' in params)
+                    params['error']();
+            }
+        }
+
+        for (let k in params['data'])
+            data += `${k}=${params['data'][k]}&`;
+
+        // 去掉最后一个多余的&符号
+        data = data.slice(0, -1);
+
+        ajax.send(data);
+    }
 }
 
-$.prototype.init.prototype = $.prototype;
+$ = function(select = null) {
+    return new _$(select);
+}
 
-$.ajax = function(params) {
-    let ajax = new XMLHttpRequest(), data = '';
+$._$ = new _$();
 
-    ajax.open(params['method'], params['url'], true);
-    ajax.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-    ajax.onreadystatechange = () => {
-        if (ajax.readyState === 4 && ajax.status === 200) {
-            let response = JSON.parse(ajax.responseText);
-            params['success'](response);
-        }
-        else {
-            if ('error' in params)
-                params['error']();
-        }
-    }
-
-    for (let k in params['data'])
-        data += `${k}=${params['data'][k]}&`;
-
-    // 去掉最后一个多余的&符号
-    data = data.slice(0, -1);
-
-    ajax.send(data);
+$.ajax = (params) => {
+    return this._$.ajax(params);
 }
