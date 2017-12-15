@@ -41,8 +41,5 @@ $ = function(select = null) {
     return new _$(select);
 }
 
-$._$ = new _$();
-
-$.ajax = (params) => {
-    return this._$.ajax(params);
-}
+// 等价于$.__proto__ = new _$()
+Object.setPrototypeOf($, new _$());
