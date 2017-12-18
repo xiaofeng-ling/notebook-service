@@ -15,6 +15,7 @@
 require_once 'config/config.php';
 require_once 'router.php';
 require_once 'helper.php';
+require_once "model/model.php";
 
 init();
 
@@ -31,7 +32,15 @@ Router()->addRoles('/user/login', function() {
 Router()->addRoles('/test', function() {
    $user = new \user\user();
 
-   var_dump($user->getLoginUser());
+    (new \test())->hello();
+
+//   return $user->getList();
+});
+
+Router()->addRoles('/modelTest', function() {
+    $test = new \Test\modelTest();
+
+    return $test->notebookTest();
 });
 
 // 用作路由时

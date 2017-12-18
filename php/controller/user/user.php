@@ -15,11 +15,20 @@ class user
      */
     private $loggedUser = null;
 
+    /**
+     * 加载登录界面
+     * @throws \Exception
+     */
     public function loginView()
     {
         return view('user\login.php');
     }
 
+    /**
+     * 对外接口 登录
+     * @return array
+     * @throws \Exception
+     */
     public function login()
     {
         $name = trim(io()->post('name'));
@@ -27,7 +36,7 @@ class user
 
         // 这里从数据库里面查找有没有这个人，没有的话直接返回
         // 有的话进行密码比对
-        $result = db()->query('SELECT password FROM user WHERE name="'.$name.'"');
+        $result = db('user')->query('SELECT password FROM user WHERE name="'.$name.'"');
 
         if (!$result)
             return ['cn' => 2, 'msg' => '没有这个用户'];
@@ -41,6 +50,11 @@ class user
         return ['cn' => 0, 'msg' => '验证通过', 'data' => $sess];
     }
 
+    /**
+     * 获取登录的用户
+     * @return array|null
+     * @throws \Exception
+     */
     public function getLoginUser()
     {
         if ($this->loggedUser)
@@ -53,7 +67,7 @@ class user
 
         $name = secret()->decrypt(base64_decode($sess));
 
-        $user = db()->query('SELECT * FROM user WHERE name="'.$name.'"');
+        $user = db('user')->query('SELECT * FROM user WHERE name="'.$name.'"');
 
         if (!$user)
             return ['cn' => 4, 'msg' => '没有这个用户'];

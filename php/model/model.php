@@ -12,7 +12,7 @@
 abstract class database
 {
     public static $i;
-    private $connect;
+    protected $connect;
 
     public function __construct()
     {
@@ -22,9 +22,45 @@ abstract class database
             throw new Exception($this->connect->lastErrorMsg());
     }
 
+    /**
+     * @param $query
+     * @return array
+     * @throws Exception
+     */
     public function query($query)
     {
         $result = $this->connect->query($query);
+        $resultArr = [];
+
+        if (!$result)
+            throw new Exception($this->connect->lastErrorMsg());
+
+        while ($r = $result->fetchArray(SQLITE3_ASSOC))
+            $resultArr[] = $r;
+
+        return $resultArr;
+    }
+
+    /**
+     * 安全的查询
+     * @param string $query
+     * @param array $params
+     * @return array
+     * @throws Exception
+     */
+    public function querySafety(string $query, Array $params = [])
+    {
+        $query = $this->connect->prepare($query);
+
+        // 防止是关联数组引起的冲突
+        $params = array_values($params);
+
+        for ($i=0; $i<count($params); $i++)
+        {
+            $query->bindValue($i+1, $params[$i]);
+        }
+
+        $result = $query->execute();
         $resultArr = [];
 
         if (!$result)
@@ -43,20 +79,4 @@ abstract class database
 
     abstract public function getTableName();
     abstract public function createTable();
-}
-
-/**
- * Class db
- */
-class db extends database
-{
-    public function getTableName()
-    {
-        return 'user';
-    }
-
-    public function createTable()
-    {
-        return $this->query('CREATE TABLE user(id INT PRIMARY KEY, name VARCHAR NOT NULL, password VARCHAR NOT NULL)');
-    }
 }

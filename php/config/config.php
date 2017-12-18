@@ -16,3 +16,8 @@ $config['db'] = [
 $config['system'] = [
     'domain' => '',
 ];
+
+$config['modelMap'] = [
+        'user' => \model\user::class,
+        'notebook' => \model\notebook::class,
+];

@@ -15,7 +15,28 @@ if (!function_exists('init'))
 
         // 自动加载
         spl_autoload_register(function($classname) {
-            if ($classname)
+            // 加载model下的数据库文件
+            // 优先加载文件夹中的类
+            // new \model\test()  => test(dir)\test.php@test(class)
+            if (preg_match('/model\\\/', $classname))
+            {
+                $path = __DIR__ . '\\'. $classname . '.php';
+
+                if (file_exists($path))
+                    require_once $path;
+                else
+                {
+                    // 尝试加载文件
+                    // new \test\test() => test.php@test(class)
+                    $classnameArr = explode('\\', $classname);
+                    array_pop($classnameArr);
+                    $path = __DIR__ . '\\'. implode('\\', $classnameArr) . '.php';
+
+                    if (file_exists($path))
+                        require_once $path;
+                }
+            }
+            else if ($classname)
             {
                 // 优先加载文件夹中的类
                 // new \test\test()  => test(dir)\test.php@test(class)
@@ -35,14 +56,6 @@ if (!function_exists('init'))
                         require_once $path;
                 }
             }
-        });
-
-        set_error_handler(function() {
-
-        });
-
-        set_exception_handler(function() {
-
         });
     }
 }
@@ -84,15 +97,25 @@ if (!function_exists('view'))
 if (!function_exists('db'))
 {
     /**
-     * @return db()
+     * @param $tableName
+     * @return \database()
+     * @throws Exception
      */
-    function db()
+    function db($tableName)
     {
-        require_once "model/model.php";
-        if (!db::$i)
-            db::$i = new db();
+        $modelMap = config('modelMap');
+        // 存放实例化后的数据表
+        static $classMap = [];
 
-        return db::$i;
+        if (!array_key_exists($tableName, $modelMap))
+            throw new Exception("没有这个数据表！");
+
+        $tableClass = $modelMap[$tableName];
+
+        if (!isset($classMap[$tableName]))
+            $classMap[$tableName] = new $tableClass;
+
+        return $classMap[$tableName];
     }
 }
 
