@@ -70,7 +70,7 @@ class user
         $user = db('user')->query('SELECT * FROM user WHERE name="'.$name.'"');
 
         if (!$user)
-            return ['cn' => 4, 'msg' => '没有这个用户'];
+            return ['cn' => 4, 'msg' => '没有这个用户或尚未登录'];
 
         return $this->loggedUser = $user;
     }

@@ -51,7 +51,6 @@ if (!function_exists('init'))
                     $classnameArr = explode('\\', $classname);
                     array_pop($classnameArr);
                     $path = __DIR__ . '\\controller\\' . implode('\\', $classnameArr) . '.php';
-
                     if (file_exists($path))
                         require_once $path;
                 }

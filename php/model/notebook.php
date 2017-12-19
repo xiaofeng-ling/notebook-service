@@ -34,7 +34,7 @@ class notebook extends database
 
         try
         {
-            $this->query('INSERT INTO ' . $this->getTableName() . ' (date, data, insertTime, updateTime) VALUES (?, ?, ?, ?)', $params);
+            $this->querySafe('INSERT INTO ' . $this->getTableName() . ' (date, data, insertTime, updateTime) VALUES (?, ?, ?, ?)', $params);
         }
         catch (\Exception $e)
         {
@@ -61,7 +61,8 @@ class notebook extends database
 
         try
         {
-            $this->querySafety('UPDATE ' . $this->getTableName() . ' SET date=?, data=?, updateTime=? WHERE Id=' . $id, $params);
+            $this->querySafe('UPDATE ' . $this->getTableName() . ' SET date=?, data=?, updateTime=? WHERE Id=' . intval($id)
+                , $params);
         }
         catch (\Exception $e)
         {
@@ -73,6 +74,16 @@ class notebook extends database
 
     /**
      * @param int $id
+     * @return array
+     * @throws \Exception
+     */
+    public function getOneById(int $id)
+    {
+        return $this->querySafe('SELECT * FROM '.db('notebook')->getTableName().' WHERE id=?', ['id' => intval($id)]);
+    }
+
+    /**
+     * @param int $id
      * @return bool
      * @throws \Exception
      */
@@ -80,7 +91,7 @@ class notebook extends database
     {
         try
         {
-            $this->query('DELETE FROM ' . $this->getTableName() . ' WHERE id=' . $id);
+            $this->query('DELETE FROM ' . $this->getTableName() . ' WHERE id=' . intval($id));
         }
         catch (\Exception $e)
         {

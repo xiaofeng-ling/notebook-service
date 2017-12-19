@@ -48,7 +48,7 @@ abstract class database
      * @return array
      * @throws Exception
      */
-    public function querySafety(string $query, Array $params = [])
+    public function querySafe(string $query, Array $params = [])
     {
         $query = $this->connect->prepare($query);
 
@@ -70,6 +70,11 @@ abstract class database
             $resultArr[] = $r;
 
         return $resultArr;
+    }
+
+    public function getConnect()
+    {
+        return $this->connect;
     }
 
     public function __destruct()

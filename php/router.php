@@ -68,8 +68,8 @@ class router
 
             $user = (new \user\user())->getLoginUser();
 
-//            if (isset($user['cn']) && $user['cn'] != 0)
-//                $this->on403($user['msg']);
+            if (isset($user['cn']) && $user['cn'] != 0)
+                $this->on403($user['msg']);
         });
     }
 
