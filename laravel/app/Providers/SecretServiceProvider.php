@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 
-class SecretProvider extends ServiceProvider
+class SecretServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
@@ -23,13 +23,13 @@ class SecretProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('secret', function($app) {
-            return new secret();
+        $this->app->singleton('Secret', function($app) {
+            return new Secret();
         });
     }
 }
 
-class secret
+class Secret
 {
     private $openssl;
     private $method = 'AES-256-CFB';        // 具体支持的算法可以用openssl_get_cipher_methods取得

@@ -1,0 +1,83 @@
+body {
+    border: 0;
+    margin: 0;
+    font-family: 微软雅黑, 华文仿宋, 宋体, serif;
+}
+
+.time {
+    color: #777777;
+    float: left !important;
+    margin-left: -15px;
+    padding: 15px;
+}
+
+.notebook-name {
+    color: #777777;
+    position: relative;
+    padding: 15px;
+    left: 22%;
+    float: left;
+}
+
+.main
+{
+    margin: 0 auto 0 auto;
+    padding: 0 15px 0 15px;
+}
+
+.frame {
+    margin: 0;
+    border: 1px solid #d6cccc;
+    float: left;
+}
+
+.operation {
+    height: 10%;
+    min-height: 100px;
+    text-align: center;
+}
+
+.list {
+    border: 1px solid #d6cccc;
+    height: 90%;
+    padding: 8px;
+}
+
+.list > ul {
+    list-style-type: none;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+}
+
+.list > ul > li {
+    border: 1px solid #d6cccc;
+    border-radius: 2px;
+}
+
+.edit
+{
+    width:80%;
+    height:100%;
+    display: block;
+    border: 0;
+}
+
+.right
+{
+    width:20%;
+    height:100%;
+}
+
+.text
+{
+    width:100%;
+    height:100%;
+    border: 1px solid #d6cccc;
+    padding:10px;
+}
+
+.main
+{
+    height:900px;
+}

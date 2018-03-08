@@ -11,6 +11,8 @@
 |
 */
 
+use Illuminate\Http\Request;
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -18,3 +20,8 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('notebook/test', 'NotebookController@getList');
+
+Route::post('notebook/getList', 'NotebookController@getList');
+Route::resource('notebook', 'NotebookController', ['except' => ['create', 'edit']]);

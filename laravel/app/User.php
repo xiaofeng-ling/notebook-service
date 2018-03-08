@@ -26,4 +26,14 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /**
+     * 获取用户id
+     *
+     * @return int userId
+     */
+    public function getUserId()
+    {
+        return $this->getAttribute('id');
+    }
 }
