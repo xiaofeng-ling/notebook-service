@@ -36,8 +36,7 @@ class NotebookController extends Controller
     public function store()
     {
         $this->validate($this->request, [
-            'title' => 'required|unique:notebook_data',
-            'content' => 'required',
+            'title' => 'required',
             'notebook_id' => 'required|integer'
         ]);
 
@@ -50,7 +49,10 @@ class NotebookController extends Controller
         if (!$notebook->save())
             return App()->make('Result', [1, '保存失败！']);
 
-        return App()->make('Result', [0, '保存成功！']);
+        $ret = App()->make('Result', [0, '保存成功！']);
+        $ret->setData(['id' => $notebook->id]);
+
+        return $ret;
     }
 
     /**
@@ -116,9 +118,11 @@ class NotebookController extends Controller
         $start = $this->request->post('start');
         $end = $this->request->post('end');
 
+        $limit = $end-$start;
+
         $results = Notebook::where(
             ['notebook_id' => $notebook_id,
-            ])->get()->slice($start, $end);
+            ])->get()->slice($start, $limit);
 
         $data = [];
         foreach ($results as $result)

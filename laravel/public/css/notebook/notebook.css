@@ -6,7 +6,7 @@ body {
 
 .time {
     color: #777777;
-    float: left !important;
+    float: left;
     margin-left: -15px;
     padding: 15px;
 }
@@ -41,6 +41,7 @@ body {
     border: 1px solid #d6cccc;
     height: 90%;
     padding: 8px;
+    overflow-y: auto;
 }
 
 .list > ul {
@@ -53,6 +54,12 @@ body {
 .list > ul > li {
     border: 1px solid #d6cccc;
     border-radius: 2px;
+    cursor: pointer;
+}
+
+li:hover {
+    border-color:#d1e1ec !important;
+    color: black;
 }
 
 .edit
@@ -80,4 +87,9 @@ body {
 .main
 {
     height:900px;
+}
+
+.select
+{
+    background-color: #cedde6;
 }

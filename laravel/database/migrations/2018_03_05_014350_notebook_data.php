@@ -16,7 +16,7 @@ class NotebookData extends Migration
         Schema::create('notebook_data', function (Blueprint $table) {
             $table->increments('id');
             $table->string("title")->index();
-            $table->string("content");
+            $table->string("content")->nullable();
             $table->integer('user_id')->index();
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();

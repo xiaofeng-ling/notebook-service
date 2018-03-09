@@ -22,7 +22,6 @@
             <div class="container">
                 <div class="collapse navbar-collapse" id="app-navbar-collapse">
                     <div class="time">
-                        2018-01-02 12:33:44
                     </div>
 
                     <div class="notebook-name">

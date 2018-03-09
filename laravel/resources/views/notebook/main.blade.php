@@ -10,9 +10,9 @@
 
         <div class="frame right">
             <div class="operation">
-                <button>保存</button>
-                <button>删除</button>
-                <button>修改</button>
+                <button id="save">保存</button>
+                <button id="delete">删除</button>
+                <button id="create">新增</button>
             </div>
 
             <div class="list">
