@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Notebook;
+use App\NotebookMain;
 use App\User;
 use Illuminate\Foundation\Testing\Concerns\InteractsWithConsole;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
@@ -29,7 +30,7 @@ class notebookApiTest extends TestCase
 
     public function testIndex()
     {
-        $response = $this->get('http://192.168.0.160:8080/notebook');
+        $response = $this->get('/notebook');
 
         $response->assertStatus(200);
     }
@@ -37,10 +38,11 @@ class notebookApiTest extends TestCase
     public function testStore()
     {
         $title = '测试数据'.random_int(5, 200);
-        $response = $this->json('POST', 'http://192.168.0.160:8080/notebook', [
+        $notebookMain = NotebookMain::first();
+        $response = $this->json('POST', '/notebook', [
             'title' => $title,
             'content' => '测试内容',
-            'notebookId' => rand(10, 50)
+            'notebook_id' => $notebookMain->id,
         ], $this->defaultHeaders);
 
         $response->assertJson(['code' => 0]);
@@ -56,7 +58,7 @@ class notebookApiTest extends TestCase
     {
         $id = (Notebook::first())->id;
 
-        $response = $this->get('http://192.168.0.160:8080/notebook/'.$id);
+        $response = $this->get('/notebook/'.$id);
 
         $response->assertStatus(200);
     }
@@ -69,7 +71,7 @@ class notebookApiTest extends TestCase
         $id = (Notebook::first())->id;
 
         $title = '测试数据'.random_int(500, 2000);
-        $response = $this->putJson('http://192.168.0.160:8080/notebook/'.$id,
+        $response = $this->putJson('/notebook/'.$id,
             ['title' => $title,
             'content' => '1234',
             ]
@@ -89,7 +91,7 @@ class notebookApiTest extends TestCase
     {
         $id = (Notebook::first())->id;
 
-        $response = $this->json('DELETE', 'http://192.168.0.160:8080/notebook/'.$id);
+        $response = $this->json('DELETE', '/notebook/'.$id);
 
         $response->assertJson(['code' => 0]);
     }
@@ -99,10 +101,10 @@ class notebookApiTest extends TestCase
      */
     public function testGetList()
     {
-        $id = (Notebook::first())->notebook_id;
+        $id = (NotebookMain::first())->id;
 
-        $response = $this->postJson('http://192.168.0.160:8080/notebook/getList', [
-            'notebookId' => $id,
+        $response = $this->postJson('/notebook/getList', [
+            'notebook_id' => $id,
             'start' => 0,
             'end' => 10,
         ]);

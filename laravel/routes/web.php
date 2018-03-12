@@ -23,3 +23,11 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 Route::post('notebook/getList', 'NotebookController@getList');
 Route::resource('notebook', 'NotebookController', ['except' => ['create', 'edit']]);
+
+Route::post('notebookMain/getList', 'NotebookMainController@getList');
+Route::resource('notebookMain', 'NotebookMainController', ['except' => ['create', 'edit']]);
+
+Route::get("/test", function() {
+    $test = (\App\Notebook::first())->notebookMain;
+    var_dump($test);
+});

@@ -2,6 +2,7 @@
 @extends('layouts.notebook')
 
 @section("content")
+    <link href="{{ asset('css/notebook/notebook.css') }}" rel="stylesheet">
     <div class="container main">
 
         <div class="frame edit">

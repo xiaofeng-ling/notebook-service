@@ -1,24 +1,3 @@
-body {
-    border: 0;
-    margin: 0;
-    font-family: 微软雅黑, 华文仿宋, 宋体, serif;
-}
-
-.time {
-    color: #777777;
-    float: left;
-    margin-left: -15px;
-    padding: 15px;
-}
-
-.notebook-name {
-    color: #777777;
-    position: relative;
-    padding: 15px;
-    left: 22%;
-    float: left;
-}
-
 .main
 {
     margin: 0 auto 0 auto;

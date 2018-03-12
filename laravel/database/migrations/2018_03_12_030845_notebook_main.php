@@ -5,10 +5,10 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
 /**
- * 日记本数据表，也就是里面的页
- * Class NotebookData
+ * 日记本表
+ * Class NotebookMain
  */
-class NotebookData extends Migration
+class NotebookMain extends Migration
 {
     /**
      * Run the migrations.
@@ -17,13 +17,15 @@ class NotebookData extends Migration
      */
     public function up()
     {
-        Schema::create('notebook_data', function (Blueprint $table) {
+        Schema::create('notebook_main', function (Blueprint $table)
+        {
             $table->increments('id');
-            $table->string("title")->index();
-            $table->string("content")->nullable();
+            $table->string("name")->index();
+            $table->string("description")->nullable();
             $table->integer('user_id')->index();
             $table->timestamp('created_at')->nullable();
             $table->timestamp('updated_at')->nullable();
+            $table->timestamp('deleted_at')->nullable();
         });
     }
 
@@ -34,6 +36,6 @@ class NotebookData extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('notebook_data');
+        //
     }
 }

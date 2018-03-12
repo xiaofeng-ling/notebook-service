@@ -5,3 +5,9 @@ function setTime() {
 }
 
 setInterval(setTime, 1000);
+
+(function setTitle() {
+    if (sessionStorage.notebook_name !== undefined) {
+        $(".notebook-name").text(sessionStorage.notebook_name);
+    }
+})();

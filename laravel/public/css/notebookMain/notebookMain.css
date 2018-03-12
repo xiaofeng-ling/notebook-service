@@ -1,0 +1,22 @@
+.notebookMain
+{
+    width: 116px;
+    height: 188px;
+    float: left;
+    margin: 10px 15px 10px 15px;
+    border-radius: 2px;
+    border: solid #dcdcdc 1px;
+    padding: 5px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.notebookMain > img {
+    height: 100%;
+    width: 100%;
+}
+
+.text
+{
+    writing-mode: vertical-rl;
+}

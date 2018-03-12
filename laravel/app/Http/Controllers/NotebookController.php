@@ -37,7 +37,11 @@ class NotebookController extends Controller
     {
         $this->validate($this->request, [
             'title' => 'required',
-            'notebook_id' => 'required|integer'
+            'notebook_id' => 'required|integer|exists:notebook_main,id'
+        ], [
+            'title.required' => '标题是必须的！',
+            'notebook_id.required' => '日记本的id是必须的！',
+            'notebook_id.exists' => 'id不存在',
         ]);
 
         $notebook = new Notebook();

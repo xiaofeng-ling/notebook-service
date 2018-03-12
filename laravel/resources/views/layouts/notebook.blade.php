@@ -12,9 +12,10 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-    <link href="{{ asset('css/notebook/notebook.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/global.css') }}" rel="stylesheet">
 
     <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="http://apps.bdimg.com/libs/jqueryui/1.9.2/jquery-ui.min.js"></script>
 </head>
 <body>
     <div id="app">
@@ -25,7 +26,7 @@
                     </div>
 
                     <div class="notebook-name">
-                        这里是日记本名字
+
                     </div>
 
                     <ul class="nav navbar-nav navbar-right">

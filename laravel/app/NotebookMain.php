@@ -5,7 +5,7 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Notebook extends Model
+class NotebookMain extends Model
 {
     // 软删除trait
     use SoftDeletes;
@@ -15,15 +15,7 @@ class Notebook extends Model
      *
      * @var string
      */
-    protected $table = 'notebook_data';
+    protected $table = 'notebook_main';
 
     protected $dates = ['deleted_at'];
-
-    /**
-     * notebook_id关系对应
-     */
-    public function notebookMain()
-    {
-        return $this->belongsTo('App\NotebookMain', 'notebook_id');
-    }
 }
