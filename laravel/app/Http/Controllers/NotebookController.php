@@ -107,6 +107,27 @@ class NotebookController extends Controller
     }
 
     /**
+     * 修改标题
+     * @param $id
+     * @return mixed
+     */
+    public function modifyTitle($id)
+    {
+        $this->validate($this->request, [
+            'title' => 'required',
+        ]);
+
+        $notebook = Notebook::find($id);
+
+        $notebook->title = $this->request->input('title');
+
+        if (!$notebook->save())
+            return App()->make('Result', [1, '更新失败！']);
+
+        return App()->make('Result', [0, '更新成功！']);
+    }
+
+    /**
      * 删除一页日记
      * @param $id
      * @return mixed

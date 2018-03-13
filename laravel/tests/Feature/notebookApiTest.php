@@ -68,6 +68,8 @@ class notebookApiTest extends TestCase
      */
     public function testUpdate()
     {
+        $this->markTestIncomplete();
+
         $notebook = Notebook::first();
 
         $id = $notebook->id;
@@ -96,6 +98,24 @@ class notebookApiTest extends TestCase
         );
 
         $response->assertJson(['code' => 2]);
+    }
+
+    /**
+     * @depends testStore
+     */
+    public function testModifyTitle()
+    {
+        $notebook = Notebook::first();
+
+        $id = $notebook->id;
+        $title = $notebook->title.'修改后';
+
+        $response = $this->json('POST', '/notebook/modifyTitle/'.$id, [
+            'title' => $title,
+            ]);
+
+        $response->assertJson(['code' => 0]);
+        $this->assertDatabaseHas("notebook_data", ['id' => $notebook->id, 'title' => $title]);
     }
 
     /**

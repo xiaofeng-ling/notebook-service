@@ -1,7 +1,7 @@
 (function () {
     var step = 100, is_end = false, notebook_id = sessionStorage.notebook_id;
 
-    var echoError = function(result) {
+    var echoError = function (result) {
         if (result.status === 422) { // 数据验证失败
             var errors = result.responseJSON.errors;
 
@@ -34,8 +34,8 @@
                 for (var i = 0; i < result.length; i++) {
                     var li = $("<li></li>").text(result[i].title);
                     li.attr({
-                        'data-id' : result[i].id,
-                        'updated-at' : result[i].updated_at
+                        'data-id': result[i].id,
+                        'updated-at': result[i].updated_at
                     });
 
                     // 绑定点击事件
@@ -83,8 +83,8 @@
                 for (var i = 0; i < result.length; i++) {
                     var li = $("<li></li>").text(result[i].title);
                     li.attr({
-                        'data-id' : result[i].id,
-                        'updated-at' : result[i].updated_at
+                        'data-id': result[i].id,
+                        'updated-at': result[i].updated_at
                     });
 
                     // 绑定点击事件
@@ -222,6 +222,36 @@
         return $(".select");
     };
 
+    var modifyTitle = function(title) {
+        if (title === undefined || title === '') {
+            alert("请输入标题！");
+            return false;
+        }
+
+        id = getSelectObject().attr('data-id');
+
+        $.ajax({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            },
+            url: '/notebook/modifyTitle/'+ id,
+            type: "POST",
+            data: {
+                title: title
+            },
+
+            dataType: 'json',
+
+            success: function (result) {
+                if (result.code === 0) {
+                    getSelectObject().text(title);
+                }
+            },
+
+            error: echoError
+        });
+    }
+
     /**
      * 全局初始化
      */
@@ -242,7 +272,15 @@
 
         $("#save").click(function (e) {
             saveContent(notebook_id, getSelectObject().attr('data-id'), getSelectObject().attr('updated-at'));
-        })
+        });
+
+        $("#modify").click(function (e) {
+            var title = prompt("请输入标题");
+
+            if (title !== null) {
+                modifyTitle(title);
+            }
+        });
     });
 
 })();

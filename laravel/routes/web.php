@@ -22,6 +22,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::post('notebook/getList', 'NotebookController@getList');
+Route::post('notebook/modifyTitle/{id}', 'NotebookController@modifyTitle');
 Route::resource('notebook', 'NotebookController', ['except' => ['create', 'edit']]);
 
 Route::post('notebookMain/getList', 'NotebookMainController@getList');

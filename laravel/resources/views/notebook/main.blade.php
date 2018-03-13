@@ -14,6 +14,7 @@
                 <button id="save">保存</button>
                 <button id="delete">删除</button>
                 <button id="create">新增</button>
+                <button id="modify">修改标题</button>
             </div>
 
             <div class="list">
