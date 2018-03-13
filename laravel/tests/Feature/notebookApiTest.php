@@ -68,12 +68,16 @@ class notebookApiTest extends TestCase
      */
     public function testUpdate()
     {
-        $id = (Notebook::first())->id;
+        $notebook = Notebook::first();
+
+        $id = $notebook->id;
 
         $title = '测试数据'.random_int(500, 2000);
-        $response = $this->putJson('/notebook/'.$id,
-            ['title' => $title,
-            'content' => '1234',
+        $response = $this->putJson('/notebook/' . $id,
+            [
+                'title' => $title,
+                'content' => '1234',
+                'updated_at' => strtotime($notebook->updated_at),
             ]
         );
 
@@ -82,6 +86,16 @@ class notebookApiTest extends TestCase
             'id' => $id,
             'title' => $title,
         ]);
+
+        $response = $this->putJson('/notebook/' . 72,
+            [
+                'title' => $title,
+                'content' => '1234',
+                'updated_at' => strtotime($notebook->updated_at),
+            ]
+        );
+
+        $response->assertJson(['code' => 2]);
     }
 
     /**
@@ -89,6 +103,8 @@ class notebookApiTest extends TestCase
      */
     public function testDestory()
     {
+        $this->markTestIncomplete();
+
         $id = (Notebook::first())->id;
 
         $response = $this->json('DELETE', '/notebook/'.$id);

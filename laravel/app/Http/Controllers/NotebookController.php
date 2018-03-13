@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Notebook;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 
 class NotebookController extends Controller
 {
@@ -44,19 +45,11 @@ class NotebookController extends Controller
             'notebook_id.exists' => 'id不存在',
         ]);
 
-        $notebook = new Notebook();
-        $notebook->title = $this->request->post('title');
-        $notebook->content = $this->request->post('content');
-        $notebook->notebook_id = $this->request->post('notebook_id');
-        $notebook->user_id = $this->request->user()->getUserId();
+        $title = $this->request->post('title');
+        $content = $this->encrypt((string)$this->request->post('content'));
+        $notebook_id = $this->request->post('notebook_id');
 
-        if (!$notebook->save())
-            return App()->make('Result', [1, '保存失败！']);
-
-        $ret = App()->make('Result', [0, '保存成功！']);
-        $ret->setData(['id' => $notebook->id]);
-
-        return $ret;
+        return $this->save($title, $content, $notebook_id);
     }
 
     /**
@@ -68,7 +61,10 @@ class NotebookController extends Controller
     {
         $result = Notebook::find($id);
 
-        return $result->getAttributes();
+        $data = $result->getAttributes();
+        $data['content'] = $this->decrypt((string)$data['content']);
+
+        return $data;
     }
 
     /**
@@ -81,11 +77,28 @@ class NotebookController extends Controller
         $this->validate($this->request, [
             'title' => 'required',
             'content' => 'required',
+            'updated_at' => 'required',
         ]);
 
         $notebook = Notebook::find($id);
-        $notebook->title = $this->request->input('title');
-        $notebook->content = $this->request->input('content');
+
+        // 产生了冲突
+        if (strtotime($notebook->updated_at) > (int)$this->request->input('updated_at'))
+        {
+            $title = $this->request->input('title')."_冲突".mt_rand(100, 999);
+            $content = $this->encrypt((string)$this->request->input('content'));
+            $notebook_id = $notebook->notebookMain->id;
+
+            $ret = $this->save($title, $content, $notebook_id);
+            $ret->setErr(2, '有冲突，冲突文件已被命名为：'.$title);
+
+            return $ret;
+        }
+        else
+        {
+            $notebook->title = $this->request->input('title');
+            $notebook->content = $this->encrypt((string)$this->request->input('content'));
+        }
 
         if (!$notebook->save())
             return App()->make('Result', [1, '更新失败！']);
@@ -131,9 +144,59 @@ class NotebookController extends Controller
         $data = [];
         foreach ($results as $result)
         {
-            $data[] = $result->only(['id', 'title']);
+            $tempData = $result->only(['id', 'title', 'updated_at']);
+            $tempData['updated_at'] = strtotime($tempData['updated_at']);
+            $data[] = $tempData;
         }
 
         return $data;
+    }
+
+    /**
+     * 加密数据
+     * 由于直接使用的laravel自带函数，所以请确保env中的APP_KEY不要更改
+     * 否则会导致数据无法解密
+     * @param string $data
+     * @return string
+     */
+    private function encrypt($data)
+    {
+        return Crypt::encryptString($data);
+    }
+
+    /**
+     * 解密数据
+     * 由于直接使用的laravel自带函数，所以请确保env中的APP_KEY不要更改
+     * 否则会导致数据无法解密
+     * @param string $data
+     * @return string
+     */
+    private function decrypt(string $data)
+    {
+        return Crypt::decryptString($data);
+    }
+
+    /**
+     * 保存至数据库
+     * @param string $title
+     * @param string $content
+     * @param int $notebook_id
+     * @return mixed
+     */
+    private function save(string $title, string $content, int $notebook_id)
+    {
+        $notebook = new Notebook();
+        $notebook->title = (string)$title;
+        $notebook->content = (string)$content;
+        $notebook->notebook_id = (int)$notebook_id;
+        $notebook->user_id = $this->request->user()->getUserId();
+
+        if (!$notebook->save())
+            return App()->make('Result', [1, '保存失败！']);
+
+        $ret = App()->make('Result', [0, '保存成功！']);
+        $ret->setData(['id' => $notebook->id]);
+
+        return $ret;
     }
 }

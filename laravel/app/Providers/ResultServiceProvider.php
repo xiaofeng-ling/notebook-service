@@ -43,9 +43,18 @@ class Result
      */
     public function __construct(int $errorCode, string $errorMsg, Array $data = [])
     {
+        $this->setErr($errorCode, $errorMsg);
+        $this->setData($data);
+    }
+
+    /**
+     * @param int $errorCode
+     * @param string $errorMsg
+     */
+    public function setErr(int $errorCode, string $errorMsg)
+    {
         $this->errorCode = $errorCode;
         $this->errorMsg = $errorMsg;
-        $this->data = $data;
     }
 
     /**
