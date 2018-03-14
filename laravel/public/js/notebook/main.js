@@ -1,6 +1,22 @@
 (function () {
     var step = 100, is_end = false, notebook_id = sessionStorage.notebook_id;
 
+    /**
+     * 获取格式化后的当前日期
+     * @returns {string}
+     */
+    var getFormatDate = function() {
+        var date = new Date();
+
+        return date.getFullYear()+'年'
+            +(date.getMonth()+1)+'月'
+            +date.getDate()+'日';
+    };
+
+    /**
+     * 输出错误
+     * @param result
+     */
     var echoError = function (result) {
         if (result.status === 422) { // 数据验证失败
             var errors = result.responseJSON.errors;
@@ -256,10 +272,13 @@
      * 全局初始化
      */
     $(window).ready(function (e) {
+        if (notebook_id === 0 || notebook_id === undefined)
+            window.location.href = "/notebookMain";
+
         loadTitle(notebook_id);
 
         $("#create").click(function (e) {
-            var title = prompt("请输入标题");
+            var title = prompt("请输入标题", getFormatDate());
 
             if (title !== null) {
                 createPage(notebook_id, title);
@@ -275,7 +294,7 @@
         });
 
         $("#modify").click(function (e) {
-            var title = prompt("请输入标题");
+            var title = prompt("请输入标题", getSelectObject().text());
 
             if (title !== null) {
                 modifyTitle(title);
