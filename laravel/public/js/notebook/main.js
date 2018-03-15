@@ -266,7 +266,7 @@
 
             error: echoError
         });
-    }
+    };
 
     /**
      * 全局初始化
@@ -301,5 +301,17 @@
             }
         });
     });
+
+    $(document).keydown(function(e) {
+            e = e || window.event;
+
+            // ctrl+s
+            if (e.keyCode === 83 && e.ctrlKey === true) {
+                saveContent(notebook_id, getSelectObject().attr('data-id'), getSelectObject().attr('updated-at'));
+
+                // 阻止事件继续传播
+                return false;
+            }
+        });
 
 })();
