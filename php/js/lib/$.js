@@ -25,10 +25,11 @@ class _$ {
                 if ('error' in params)
                     params['error']();
             }
-        }
+        };
 
-        for (let k in params['data'])
+        for (let k in params['data']) {
             data += `${k}=${params['data'][k]}&`;
+        }
 
         // 去掉最后一个多余的&符号
         data = data.slice(0, -1);
@@ -39,7 +40,7 @@ class _$ {
 
 $ = function(select = null) {
     return new _$(select);
-}
+};
 
 // 等价于$.__proto__ = new _$()
 Object.setPrototypeOf($, new _$());

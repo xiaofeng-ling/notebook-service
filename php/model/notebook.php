@@ -20,6 +20,7 @@ class notebook extends database
     /**
      * @param string $date 日期
      * @param string $data 数据，经过客户端加密后的数据
+     * @return bool
      * @throws \Exception
      */
     public function insert(string $date, string $data)
@@ -48,6 +49,7 @@ class notebook extends database
      * @param int $id
      * @param string $date 日期
      * @param string $data 数据，经过客户端加密后的数据
+     * @return bool
      * @throws \Exception
      */
     public function update(int $id, string $date, string $data)

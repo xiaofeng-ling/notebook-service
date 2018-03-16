@@ -163,6 +163,7 @@ if (!function_exists('secret'))
     /**
      * @param string $key
      * @return secret()
+     * @throws Exception
      */
     function secret($key = '')
     {
