@@ -143,6 +143,9 @@
      * @param updated_at
      */
     var saveContent = function (notebook_id, id, updated_at) {
+        if (id === undefined)
+            return false;
+
         $.ajax({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
