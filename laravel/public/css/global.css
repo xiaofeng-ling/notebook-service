@@ -6,6 +6,16 @@
     min-width: 190px;
 }
 
+.notice {
+    color: #777777;
+    float: left;
+    margin-left: -15px;
+    padding: 15px;
+    min-width: 190px;
+    background-color: #c6d7e2;
+    text-align: center;
+}
+
 body {
     border: 0;
     margin: 0;

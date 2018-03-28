@@ -76,7 +76,7 @@
         if (is_end && !force)
             return is_end;
 
-        start = $(".list > ul").children().length;
+        var start = $(".list > ul").children().length;
 
         $.ajax({
             headers: {
@@ -163,7 +163,8 @@
 
             success: function (result) {
                 if (result.code === 0) {
-                    alert("保存成功!");
+                    getSelectObject().attr('updated-at', result.data.updated_at);
+                    notice("保存成功!");
                 }
                 else if (result.code === 2) {
                     alert("文件已被修改，有冲突");
@@ -193,7 +194,7 @@
             success: function (result) {
                 if (result.code === 0) {
                     $("[data-id='" + id + "'").remove();
-                    alert("删除成功");
+                    notice("删除成功");
                 }
                 else
                     alert(result.data)
@@ -237,10 +238,42 @@
         });
     };
 
+    /**
+     * 左上角的通知
+     * @param text 要通知的文本
+     * @param time 持续时间，默认两秒
+     * @returns {boolean}
+     */
+    var notice = function(text, time) {
+        time = time || 2000;
+
+        if (text === undefined || text === '')
+            return false;
+
+        $(".time").addClass("notice");
+        $(".notice").removeClass("time");
+        $(".notice").text(text);
+
+        setTimeout(function() {
+            $(".notice").addClass("time");
+            $(".time").removeClass("notice");
+            $(".time").text((new Date()).toLocaleString());
+        }, time);
+    };
+
+    /**
+     * 获取被选择的对象
+     * @returns {*|jQuery|HTMLElement}
+     */
     var getSelectObject = function () {
         return $(".select");
     };
 
+    /**
+     * 修改标题
+     * @param title
+     * @returns {boolean}
+     */
     var modifyTitle = function(title) {
         if (title === undefined || title === '') {
             alert("请输入标题！");
@@ -297,6 +330,9 @@
         });
 
         $("#modify").click(function (e) {
+            if (getSelectObject().attr('data-id') === undefined)
+                return false;
+
             var title = prompt("请输入标题", getSelectObject().text());
 
             if (title !== null) {

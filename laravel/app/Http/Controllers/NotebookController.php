@@ -103,7 +103,10 @@ class NotebookController extends Controller
         if (!$notebook->save())
             return App()->make('Result', [1, '更新失败！']);
 
-        return App()->make('Result', [0, '更新成功！']);
+        $ret = App()->make('Result', [0, '更新成功！']);
+        $ret->setData(['updated_at' => strtotime($notebook->updated_at)]);
+
+        return $ret;
     }
 
     /**
