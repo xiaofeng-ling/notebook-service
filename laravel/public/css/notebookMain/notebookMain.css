@@ -20,3 +20,19 @@
 {
     writing-mode: vertical-rl;
 }
+
+.notebookMain > .action {
+    border: 1px dotted black;
+    min-height: 22px;
+    min-width: 22px;
+    text-align: center;
+    display: none;
+}
+
+.notebookMain > .delete {
+    float: right;
+}
+
+.notebookMain > .modify {
+    float: left;
+}

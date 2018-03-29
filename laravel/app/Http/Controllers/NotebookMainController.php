@@ -71,7 +71,6 @@ class NotebookMainController extends Controller
     {
         $this->validate($this->request, [
             'name' => 'required',
-            'description' => 'required',
         ]);
 
         $notebook = NotebookMain::find($id);

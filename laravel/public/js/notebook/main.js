@@ -333,7 +333,7 @@
             if (getSelectObject().attr('data-id') === undefined)
                 return false;
 
-            var title = prompt("请输入标题", getSelectObject().text());
+            var title = prompt("请输入新标题", getSelectObject().text());
 
             if (title !== null) {
                 modifyTitle(title);
