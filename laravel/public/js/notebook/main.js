@@ -1,5 +1,8 @@
 (function () {
-    var step = 100, is_end = false, notebook_id = sessionStorage.notebook_id;
+    var step = 100,                     // 每次加载的数据量
+        is_end = false,
+        notebook_id = sessionStorage.notebook_id,
+        loadNextAjaxLock = false;       // 滚动加载的ajax锁
 
     /**
      * 获取格式化后的当前日期
@@ -76,6 +79,11 @@
         if (is_end && !force)
             return is_end;
 
+        if (loadNextAjaxLock)
+            return false;
+
+        loadNextAjaxLock = true;
+
         var start = $(".list > ul").children().length;
 
         $.ajax({
@@ -111,6 +119,8 @@
 
                     $(".list > ul").append(li)
                 }
+
+                loadNextAjaxLock = false;
             }
         });
     };
@@ -150,6 +160,7 @@
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
+            async: false,
             url: '/notebook/' + id,
             type: "PUT",
             data: {
@@ -339,6 +350,19 @@
                 modifyTitle(title);
             }
         });
+
+        // 滚动加载事件
+        $(".list").on("scroll", function(e) {
+            var scrollTop = $(this).scrollTop();                        // 滚动条高度
+            var height = $(this).height();                              // 元素高度
+            var scrollHeight = $(this)[0].scrollHeight;                 // 可滚动的总高度
+
+            var scrollOffsetButtom = scrollHeight - (scrollTop+height); // 滚动条距离底部的距离
+
+            // 滚动加载！
+            if (scrollOffsetButtom < 200)
+                loadNext(notebook_id);
+        });
     });
 
     $(document).keydown(function(e) {
@@ -352,5 +376,15 @@
                 return false;
             }
         });
+
+    // 定时保存, 每一分钟保存一次
+    setInterval(function() {
+        saveContent(notebook_id, getSelectObject().attr('data-id'), getSelectObject().attr('updated-at'));
+    }, 60000);
+
+    // 退出时保存
+    window.onbeforeunload = function(e) {
+        saveContent(notebook_id, getSelectObject().attr('data-id'), getSelectObject().attr('updated-at'));
+    };
 
 })();
