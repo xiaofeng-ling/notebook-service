@@ -2,7 +2,7 @@
     var step = 100,                     // 每次加载的数据量
         is_end = false,
         notebook_id = sessionStorage.notebook_id,
-        loadNextAjaxLock = false;       // 滚动加载的ajax锁
+        loadNextAjaxLock = false;       // 滚动加载的ajax锁，防止滚动的时候出现多个请求
 
     /**
      * 获取格式化后的当前日期
