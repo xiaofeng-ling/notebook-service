@@ -67,7 +67,7 @@
                 $(".main").empty();  // 清空内容
 
                 for (var i = 0; i < result.length; i++) {
-                    var div = $("<div></div>").html("<span class='action modify'>M</span>" +
+                    var div = $("<div></div>").html("<span data-name='"+result[i].name+"' class='action modify'>M</span>" +
                         "<span class='text'>"+result[i].name+"</span>" +
                         "<span class='action delete'>X</span>");
 
@@ -112,8 +112,9 @@
                     div.children('.notebookMain > .modify').click(function(e) {
                         var self = $(this);
                         var parent = self.parent();
+                        var oldName = e.currentTarget.dataset.name;
 
-                        var name = prompt("请输入新名称");
+                        var name = prompt("请输入新名称", oldName);
 
                         if (name !== null) {
                             modifyName(name, parent.attr('data-id'));
@@ -155,6 +156,11 @@
         });
     };
 
+    /**
+     * 修改日记本名
+     * @param name
+     * @param id
+     */
     var modifyName = function(name, id) {
         if (name === undefined || name === '') {
             alert("名字不能为空！");

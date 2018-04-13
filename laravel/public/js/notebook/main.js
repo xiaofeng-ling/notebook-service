@@ -11,9 +11,12 @@
     var getFormatDate = function() {
         var date = new Date();
 
+        var month = (date.getMonth()+1).toString().padStart(2, 0);
+        var day = date.getDate().toString().padStart(2, 0);
+
         return date.getFullYear()+'年'
-            +(date.getMonth()+1)+'月'
-            +date.getDate()+'日';
+            +month+'月'
+            +day+'日';
     };
 
     /**
