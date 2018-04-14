@@ -11,14 +11,12 @@
 }
 
 .operation {
-    height: 10%;
-    min-height: 100px;
     text-align: center;
+    padding: 3px;
 }
 
 .list {
     border: 1px solid #d6cccc;
-    height: 90%;
     padding: 8px;
     overflow-y: auto;
 }
