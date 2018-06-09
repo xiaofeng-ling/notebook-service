@@ -245,6 +245,9 @@
             success: function (result) {
                 if (result.code === 0) {
                     loadNext(notebook_id, true);
+
+                    // 滚动条到最底部，方便寻找到新建的日记
+                    $(".list").scrollTop(999999999);
                 }
             },
 
