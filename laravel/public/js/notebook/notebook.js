@@ -3,7 +3,7 @@ function setTime() {
         switch (day)
         {
             case 0:
-                return '星期天';
+                return '星期日';
             case 1:
                 return '星期一';
             case 2:

@@ -76,9 +76,10 @@
      * 滚动加载
      * @param notebook_id
      * @param force  强制请求，忽略is_end
+     * @param callback 回调函数，用于在加载完成后执行
      * @returns {boolean}
      */
-    var loadNext = function (notebook_id, force) {
+    var loadNext = function (notebook_id, force, callback) {
         if (is_end && !force)
             return is_end;
 
@@ -122,6 +123,8 @@
 
                     $(".list > ul").append(li)
                 }
+
+                if (callback) callback();
 
                 loadNextAjaxLock = false;
             }
@@ -244,10 +247,10 @@
 
             success: function (result) {
                 if (result.code === 0) {
-                    loadNext(notebook_id, true);
-
-                    // 滚动条到最底部，方便寻找到新建的日记
-                    $(".list").scrollTop(999999999);
+                    loadNext(notebook_id, true, function() {
+                        // 滚动条到最底部，方便寻找到新建的日记
+                        $(".list").scrollTop(999999999);
+                    });
                 }
             },
 
