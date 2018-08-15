@@ -27,7 +27,7 @@ function setTime() {
 
     var date = new Date();
 
-    var dateStr = date.getFullYear()+'/'+strpad(date.getMonth())+'/'+strpad(date.getDate())+' '
+    var dateStr = date.getFullYear()+'/'+strpad(date.getMonth()+1)+'/'+strpad(date.getDate())+' '
                     +strpad(date.getHours())+':'+strpad(date.getMinutes())+':'+strpad(date.getSeconds())+' '
                     +formatWeekDay(date.getDay());
 
