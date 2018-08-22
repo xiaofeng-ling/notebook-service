@@ -13,10 +13,16 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+//Route::middleware('auth:api')->get('/user', function (Request $request) {
+//    return $request->user();
+//});
 
-Route::get('/add', function() {
-    return 'hello, world!';
-});
+Route::post('refresh', 'api\ApiAuthController@refresh')->name('refresh');
+Route::post('login', 'api\ApiAuthController@login');
+Route::post('logout', 'api\ApiAuthController@logout')->name('logout');
+
+Route::post('/add', function() {
+    return (function() {
+        return apiJson(request()->user());
+    })();
+})->middleware('jwtauth');
