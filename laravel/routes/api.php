@@ -21,8 +21,7 @@ Route::post('refresh', 'api\ApiAuthController@refresh')->name('refresh');
 Route::post('login', 'api\ApiAuthController@login');
 Route::post('logout', 'api\ApiAuthController@logout')->name('logout');
 
-Route::post('/add', function() {
-    return (function() {
-        return apiJson(request()->user());
-    })();
-})->middleware('jwtauth');
+Route::post('notebook/modifyTitle/{id}', 'api\NotebookController@modifyTitle')->middleware('jwtauth');
+Route::resource('notebook', 'api\NotebookController', ['except' => ['create', 'edit']])->middleware('jwtauth');
+
+Route::resource('notebookMain', 'api\NotebookMainController', ['except' => ['create', 'edit']])->middleware('jwtauth');
