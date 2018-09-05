@@ -24,4 +24,6 @@ Route::post('logout', 'api\ApiAuthController@logout')->name('logout');
 Route::post('notebook/modifyTitle/{id}', 'api\NotebookController@modifyTitle')->middleware('jwtauth');
 Route::resource('notebook', 'api\NotebookController', ['except' => ['create', 'edit']])->middleware('jwtauth');
 
-Route::resource('notebookMain', 'api\NotebookMainController', ['except' => ['create', 'edit']])->middleware('jwtauth');
+Route::get('notebookMain', 'api\NotebookMainController@index');
+Route::post('notebookMain', 'api\NotebookMainController@store');
+Route::post('notebookMain/delete', 'api\NotebookMainController@destroy');

@@ -24,7 +24,7 @@ class ApiAuthController extends Controller
             return response()->json(['message' => '账号密码不正确', 'code' => 104], 401);
         }
 
-        return apiJson($token);
+        return apiJson(['token' => $token, 'user_id' => auth('api')->user()->getUserId()]);
     }
 
     /**

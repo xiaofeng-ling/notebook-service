@@ -90,11 +90,11 @@ class NotebookMainController extends Controller
 
     /**
      * 删除一本日记
-     * @param $id
      * @return mixed
      */
-    public function destroy($id)
+    public function destroy()
     {
+        $id = (int)$this->request->post('id');
         $result = NotebookMain::find($id);
 
         return $result->delete() ?
