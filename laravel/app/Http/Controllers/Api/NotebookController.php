@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Notebook;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Validator;
 
 class NotebookController extends Controller
 {
@@ -17,8 +18,6 @@ class NotebookController extends Controller
      */
     public function __construct(Request $request)
     {
-        $this->middleware('jwtauth');
-
         $this->request = $request;
     }
 
@@ -27,11 +26,15 @@ class NotebookController extends Controller
      */
     public function index()
     {
-        $this->validate($this->request, [
+        /** @var \Illuminate\Validation\Validator $validator */
+        $validator = Validator::make($this->request->all(), [
             'notebook_id' => 'required|integer',
             'start' => 'required|integer',
             'end' => 'required|integer',
         ]);
+
+        if ($validator->fails())
+            return apiJson([], $validator->errors()->first(), 1001);
 
         $notebook_id = $this->request->post('notebook_id');
         $start = $this->request->post('start');
@@ -60,7 +63,8 @@ class NotebookController extends Controller
      */
     public function store()
     {
-        $this->validate($this->request, [
+        /** @var \Illuminate\Validation\Validator $validator */
+        $validator = Validator::make($this->request->all(), [
             'title' => 'required',
             'notebook_id' => 'required|integer|exists:notebook_main,id'
         ], [
@@ -68,6 +72,9 @@ class NotebookController extends Controller
             'notebook_id.required' => '日记本的id是必须的！',
             'notebook_id.exists' => 'id不存在',
         ]);
+
+        if ($validator->fails())
+            return apiJson([], $validator->errors()->first(), 1001);
 
         $title = $this->request->post('title');
         $content = $this->encrypt((string)$this->request->post('content'));
@@ -83,7 +90,7 @@ class NotebookController extends Controller
      */
     public function show($id)
     {
-        $result = Notebook::find($id);
+        $result = Notebook::find((int)$id);
 
         $data = $result->getAttributes();
         $data['content'] = $this->decrypt((string)$data['content']);
@@ -93,17 +100,22 @@ class NotebookController extends Controller
 
     /**
      * 更新一页日记
-     * @param $id
      * @return mixed
      */
-    public function update($id)
+    public function update()
     {
-        $this->validate($this->request, [
+        /** @var \Illuminate\Validation\Validator $validator */
+        $validator = Validator::make($this->request->all(), [
+            'id' => 'required',
             'title' => 'required',
             'content' => 'required',
             'updated_at' => 'required',
         ]);
 
+        if ($validator->fails())
+            return apiJson([], $validator->errors()->first(), 1001);
+
+        $id = (int)$this->request->post('id');
         $notebook = Notebook::find($id);
 
         // 产生了冲突
@@ -135,9 +147,13 @@ class NotebookController extends Controller
      */
     public function modifyTitle($id)
     {
-        $this->validate($this->request, [
+        /** @var \Illuminate\Validation\Validator $validator */
+        $validator = Validator::make($this->request->all(), [
             'title' => 'required',
         ]);
+
+        if ($validator->fails())
+            return apiJson([], $validator->errors()->first(), 1001);
 
         $notebook = Notebook::find($id);
 

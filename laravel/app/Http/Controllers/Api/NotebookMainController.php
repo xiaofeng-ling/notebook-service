@@ -16,8 +16,6 @@ class NotebookMainController extends Controller
      */
     public function __construct(Request $request)
     {
-        $this->middleware('jwtauth');
-
         $this->request = $request;
     }
 

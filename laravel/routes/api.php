@@ -21,9 +21,15 @@ Route::post('refresh', 'api\ApiAuthController@refresh')->name('refresh');
 Route::post('login', 'api\ApiAuthController@login');
 Route::post('logout', 'api\ApiAuthController@logout')->name('logout');
 
-Route::post('notebook/modifyTitle/{id}', 'api\NotebookController@modifyTitle')->middleware('jwtauth');
-Route::resource('notebook', 'api\NotebookController', ['except' => ['create', 'edit']])->middleware('jwtauth');
+Route::middleware('jwtauth')->group(function () {
+    Route::get('notebook', 'api\NotebookController@index');
+    Route::post('notebook', 'api\NotebookController@store');
+    Route::get('notebook/{id}', 'api\NotebookController@show');
+    Route::post('notebook/update', 'api\NotebookController@update');
+    Route::post('notebook/delete', 'api\NotebookController@destroy');
+    Route::post('notebook/modifyTitle/{id}', 'api\NotebookController@modifyTitle');
 
-Route::get('notebookMain', 'api\NotebookMainController@index');
-Route::post('notebookMain', 'api\NotebookMainController@store');
-Route::post('notebookMain/delete', 'api\NotebookMainController@destroy');
+    Route::get('notebookMain', 'api\NotebookMainController@index');
+    Route::post('notebookMain', 'api\NotebookMasinController@store');
+    Route::post('notebookMain/delete', 'api\NotebookMainController@destroy');
+});
