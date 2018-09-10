@@ -145,7 +145,7 @@ class NotebookController extends Controller
      * @param $id
      * @return mixed
      */
-    public function modifyTitle($id)
+    public function modifyTitle()
     {
         /** @var \Illuminate\Validation\Validator $validator */
         $validator = Validator::make($this->request->all(), [
@@ -155,6 +155,7 @@ class NotebookController extends Controller
         if ($validator->fails())
             return apiJson([], $validator->errors()->first(), 1001);
 
+        $id = (int)$this->request->input('id');
         $notebook = Notebook::find($id);
 
         $notebook->title = $this->request->input('title');
@@ -170,8 +171,10 @@ class NotebookController extends Controller
      * @param $id
      * @return mixed
      */
-    public function destroy($id)
+    public function destroy()
     {
+        $id = (int)$this->request->input('id');
+
         $result = Notebook::find($id);
 
         return $result->delete() ?

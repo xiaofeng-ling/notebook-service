@@ -27,7 +27,7 @@ Route::middleware('jwtauth')->group(function () {
     Route::get('notebook/{id}', 'api\NotebookController@show');
     Route::post('notebook/update', 'api\NotebookController@update');
     Route::post('notebook/delete', 'api\NotebookController@destroy');
-    Route::post('notebook/modifyTitle/{id}', 'api\NotebookController@modifyTitle');
+    Route::post('notebook/modifyTitle', 'api\NotebookController@modifyTitle');
 
     Route::get('notebookMain', 'api\NotebookMainController@index');
     Route::post('notebookMain', 'api\NotebookMasinController@store');
