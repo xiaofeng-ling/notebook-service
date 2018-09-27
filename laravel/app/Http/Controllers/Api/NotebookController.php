@@ -126,7 +126,7 @@ class NotebookController extends Controller
             $notebook_id = $notebook->notebookMain->id;
             $this->save($title, $content, $notebook_id);
 
-            return apiJson([], '有冲突，冲突文件已被命名为：'.$title, 1003);
+            return apiJson([], '有冲突，冲突文件已被命名为：'.$title, 1003, ['updated_at' => 0]);
         }
         else
         {
