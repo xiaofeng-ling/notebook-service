@@ -53,6 +53,9 @@
             dataType: 'json',
 
             success: function (result) {
+                // 事先清空所有标题，防止因为新增出现的重复数据
+                $(".list > ul").text("");
+
                 for (var i = 0; i < result.length; i++) {
                     var li = $("<li></li>").text(result[i].title);
                     li.attr({
@@ -247,10 +250,12 @@
 
             success: function (result) {
                 if (result.code === 0) {
-                    loadNext(notebook_id, true, function() {
-                        // 滚动条到最底部，方便寻找到新建的日记
-                        $(".list").scrollTop(999999999);
-                    });
+                    // loadNext(notebook_id, true, function() {
+                    //     // 滚动条到最底部，方便寻找到新建的日记
+                    //     $(".list").scrollTop(999999999);
+                    // });
+                    // 清空所有标题，重新加载，以便最新的直接出现在顶部
+                    loadTitle(notebook_id);
                 }
             },
 
