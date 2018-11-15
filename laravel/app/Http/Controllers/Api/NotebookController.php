@@ -44,7 +44,7 @@ class NotebookController extends Controller
 
         $results = Notebook::where(
             ['notebook_id' => $notebook_id,
-            ])->get()->slice($start, $limit);
+            ])->orderBy('id', 'desc')->get()->slice($start, $limit);
 
         $data = [];
         foreach ($results as $result)
