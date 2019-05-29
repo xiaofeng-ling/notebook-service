@@ -2,7 +2,8 @@
     var step = 100,                     // 每次加载的数据量
         is_end = false,
         notebook_id = sessionStorage.notebook_id,
-        loadNextAjaxLock = false;       // 滚动加载的ajax锁，防止滚动的时候出现多个请求
+        loadNextAjaxLock = false,       // 滚动加载的ajax锁，防止滚动的时候出现多个请求
+        last_notice_timeout_id = 0;             // 上一次通知的超时id，用于清除
 
     /**
      * 获取格式化后的当前日期
@@ -165,11 +166,12 @@
         if (id === undefined)
             return false;
 
+        notice("保存中……", 30000);
         $.ajax({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             },
-            async: false,
+            timeout: 5000,
             url: '/notebook/' + id,
             type: "PUT",
             data: {
@@ -275,11 +277,16 @@
         if (text === undefined || text === '')
             return false;
 
+        if (last_notice_timeout_id > 0) {
+            clearTimeout(last_notice_timeout_id);
+            last_notice_timeout_id = 0;
+        }
+
         $(".time").addClass("notice");
         $(".notice").removeClass("time");
         $(".notice").text(text);
 
-        setTimeout(function() {
+        last_notice_timeout_id = setTimeout(function() {
             $(".notice").addClass("time");
             $(".time").removeClass("notice");
             $(".time").text((new Date()).toLocaleString());
