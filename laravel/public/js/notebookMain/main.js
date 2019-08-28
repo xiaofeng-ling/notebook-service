@@ -15,7 +15,7 @@
      */
     var addCreateDiv = function() {
         $(".main").append('<div id="create" class="notebookMain">\n' +
-            '<img src="http://cn.cgright.com/icon/898_thum.jpg" />\n' +
+            '<img src="/images/add.png" />\n' +
             '</div>');
 
         $("#create").click(function(e) {
