@@ -56,6 +56,8 @@
             success: function (result) {
                 // 事先清空所有标题，防止因为新增出现的重复数据
                 $(".list > ul").text("");
+                // 同时重置结尾标识符
+                is_end = false;
 
                 for (var i = 0; i < result.length; i++) {
                     var li = $("<li></li>").text(result[i].title);
@@ -190,7 +192,8 @@
                 }
                 else if (result.code === 2) {
                     alert("文件已被修改，有冲突");
-                    loadNext(notebook_id, true);
+                    // loadNext(notebook_id, true);
+                    loadTitle(notebook_id);
                 }
             },
 
