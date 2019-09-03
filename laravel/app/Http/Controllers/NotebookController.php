@@ -257,7 +257,7 @@ class NotebookController extends Controller
 
             foreach ($results as $result)
                 if (FALSE !== strpos($this->decrypt($result->content), $keywords))
-                    $data[] = (object)['id' => $result->id, 'title' => $result->title, 'updated_at' => $result->updated_at];
+                    $data[] = (object)['id' => $result->id, 'title' => $result->title, 'updated_at' => strtotime($result->updated_at)];
 
             $start += 365;
         }

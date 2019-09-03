@@ -379,7 +379,7 @@
             var scrollOffsetButtom = scrollHeight - (scrollTop+height); // 滚动条距离底部的距离
 
             // 滚动加载！
-            if (scrollOffsetButtom < 200)
+            if (scrollOffsetButtom < 200 && !$('#is_search_page').val())
                 loadNext(notebook_id);
         });
 
