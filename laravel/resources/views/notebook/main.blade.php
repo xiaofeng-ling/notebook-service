@@ -3,8 +3,12 @@
 
 @section("content")
     <link href="{{ asset('css/notebook/notebook.css') }}" rel="stylesheet">
-    <div class="container main">
+    <div class="search">
+        <label id="search_label">搜索</label>
+        <input style="display: none;" name="keywords" autocomplete="false" id="search" />
+    </div>
 
+    <div class="container main">
         <div class="frame edit">
                 <textarea class="text" title="在这里输入日记"></textarea>
         </div>

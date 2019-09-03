@@ -223,4 +223,45 @@ class NotebookController extends Controller
 
         return $ret;
     }
+
+    /**
+     * 搜索功能
+     * @param int $notebook_id
+     * @return array
+     */
+    public function search(int $notebook_id)
+    {
+        $this->validate($this->request, [
+            'keywords' => 'required|string',
+        ]);
+
+        $keywords = trim($this->request->get('keywords'));
+        $user_id = (int)$this->request->user()->getUserId();
+
+        // 因为存入数据库中的数据是加密后的，所以搜索这个功能就交由php来处理了
+        // 每次获取365条数据（一年），解密后进行匹配
+        // 由于是日记本，所以可以仅匹配内容
+        // 因为原本设计每个人一天仅记录一篇日记，所以数据总量不会很多，哪怕是100年也才不过36500（😀）
+        $start = 0;
+        $data = [];
+
+        while (true)
+        {
+            $results = Notebook::where([
+                'notebook_id' => $notebook_id,
+                'user_id' => $user_id,
+            ])->orderBy('created_at', 'desc')->get()->slice($start, 365);
+
+            if ($results->isEmpty())
+                break;
+
+            foreach ($results as $result)
+                if (FALSE !== strpos($this->decrypt($result->content), $keywords))
+                    $data[] = (object)['id' => $result->id, 'title' => $result->title, 'updated_at' => $result->updated_at];
+
+            $start += 365;
+        }
+
+        return view('notebook.search', ['data' => $data]);
+    }
 }
