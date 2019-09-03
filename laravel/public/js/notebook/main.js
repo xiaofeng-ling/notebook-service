@@ -66,12 +66,6 @@
                         'updated-at': result[i].updated_at
                     });
 
-                    // 绑定点击事件
-                    li.click(function (e) {
-                        var self = $(this);
-                        loadContent(self.attr('data-id'));
-                    });
-
                     $(".list > ul").append(li)
                 }
             }
@@ -346,7 +340,8 @@
         if (notebook_id === 0 || notebook_id === undefined)
             window.location.href = "/notebookMain";
 
-        loadTitle(notebook_id);
+        if (!$('#is_search_page').val())
+            loadTitle(notebook_id);
 
         $("#create").click(function (e) {
             var title = prompt("请输入标题", getFormatDate());
@@ -386,6 +381,36 @@
             // 滚动加载！
             if (scrollOffsetButtom < 200)
                 loadNext(notebook_id);
+        });
+
+        // 搜索label事件
+        $('#search_label').on('click', function() {
+            $(this).hide();
+            var input = $(this).next();
+            input.show();
+        });
+
+        // 搜索事件
+        $('#search').keydown(function(e) {
+            e = e || window.event;
+
+            // Entry
+            if (e.keyCode === 0x0D) {
+                var value = $(this).val();
+                if (value.length > 0) {
+                    var url = '/notebook/search/' + notebook_id + '?keywords=' + value;
+                    if ($('#is_search_page').val())
+                        window.location.href = url;
+                    else
+                        window.open(url);
+                }
+            }
+        });
+
+        // 日记本点击事件
+        $('.list > ul').on('click', 'li', function() {
+            loadContent($(this).attr('data-id'));
+            return false;
         });
     });
 

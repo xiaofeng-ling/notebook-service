@@ -21,11 +21,10 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
+Route::get('notebook/search/{id}', 'NotebookController@search');
 Route::post('notebook/getList', 'NotebookController@getList');
 Route::post('notebook/modifyTitle/{id}', 'NotebookController@modifyTitle');
 Route::resource('notebook', 'NotebookController', ['except' => ['create', 'edit']]);
 
 Route::post('notebookMain/getList', 'NotebookMainController@getList');
 Route::resource('notebookMain', 'NotebookMainController', ['except' => ['create', 'edit']]);
-
-Route::get("/test", 'NotebookController@test');

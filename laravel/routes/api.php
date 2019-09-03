@@ -30,6 +30,6 @@ Route::middleware('jwtauth')->group(function () {
     Route::post('notebook/modifyTitle', 'api\NotebookController@modifyTitle');
 
     Route::get('notebookMain', 'api\NotebookMainController@index');
-    Route::post('notebookMain', 'api\NotebookMasinController@store');
+    Route::post('notebookMain', 'api\NotebookMainController@store');
     Route::post('notebookMain/delete', 'api\NotebookMainController@destroy');
 });
